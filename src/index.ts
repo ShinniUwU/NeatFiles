@@ -129,7 +129,7 @@ const handleChoice = async (choice: string) => {
       break;
     case '2':
       try {
-        await sortFiles(__dirname);
+        await sortFiles(process.cwd());
         console.log(ansis.green('\nDirectory sorted successfully!'));
       } catch (error) {
         console.error(
