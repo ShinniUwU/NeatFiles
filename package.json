@@ -1,0 +1,32 @@
+{
+  "name": "file_organizer",
+  "version": "1.0.0",
+  "description": "overly engineered file oranizer",
+  "main": "index.ts",
+"scripts": {
+  "start": "npx ts-node ./src/index.ts",
+  "lint": "eslint 'src/**/*.{js,ts,tsx}'",
+  "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --fix",
+  "format": "prettier --write 'src/**/*.{js,ts,tsx}'"
+},
+  "author": "Hana",
+  "author2": "Mia",
+  "license": "MIT",
+  "dependencies": {
+    "ansis": "^3.3.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "readline": "^1.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.1",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3"
+  }
+}
