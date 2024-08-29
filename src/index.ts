@@ -202,22 +202,32 @@ function sortByDirectory() {
 }
 
 async function sortFiles(filePath: string): Promise<void> {
-  if (OCDMode) {
-    console.log(ansis.yellow('Sorting with OCD Mode...'));
-    // OCD Mode implementation can be added here
-  }
-
   try {
     const files = await fs.readdir(filePath);
     const movePromises = files.map(async (file) => {
       const ext = path.extname(file).toLowerCase();
       const targetDirName = typeMappings[ext];
+      let targetDir = filePath;
+
       if (targetDirName) {
-        const targetDir = path.join(filePath, targetDirName);
+        targetDir = path.join(filePath, targetDirName);
         await fs.mkdir(targetDir, { recursive: true });
-        await fs.rename(path.join(filePath, file), path.join(targetDir, file));
-        console.log(ansis.green(`Moved ${file} to ${targetDir}`));
       }
+
+      if (OCDMode) {
+        console.log(ansis.yellow('Sorting with OCD Mode...'));
+        try {
+          const stats = await fs.stat(path.join(filePath, file));
+          const dateDir = path.join(targetDir, stats.birthtime.toISOString().split('T')[0]);
+          await fs.mkdir(dateDir, { recursive: true });
+          targetDir = dateDir;
+        } catch (error) {
+          console.error(ansis.red(`Error getting file stats: ${error}`));
+        }
+      }
+
+      await fs.rename(path.join(filePath, file), path.join(targetDir, file));
+      console.log(ansis.green(`Moved ${file} to ${targetDir}`));
     });
 
     await Promise.all(movePromises);
