@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "description": "overly engineered file organizer",
   "main": "dist/index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "prestart": "node -e \"if (!require('fs').existsSync('./dist/index.js')) { console.error('\\x1b[31mError: Compiled files not found. Please run \\'npm run build\\' first.\\x1b[0m'); process.exit(1); }\"",
     "start": "node dist/index.js",
-    "dev": "node --loader ts-node/esm src/index.ts",
+    "dev": "ts-node src/index.ts",
     "lint": "eslint 'src/**/*.{js,ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{js,ts,tsx}'",
-    "build-and-start": "npm run build --silent && npm start --silent"
+    "build-and-start": "npm run build --silent && npm start --silent",
+    "package": "npm run build && pkg . --no-bytecode"
   },
   "author": "Hana",
   "author2": "Mia",
@@ -32,6 +32,16 @@
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "pkg": "^5.8.1",
     "prettier": "^3.3.3"
+  },
+  "bin": "dist/index.js",
+  "pkg": {
+    "targets": [
+      "node16-linux-x64",
+      "node16-macos-x64",
+      "node16-win-x64"
+    ],
+    "outputPath": "executables"
   }
 }

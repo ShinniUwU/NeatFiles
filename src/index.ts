@@ -1,5 +1,6 @@
-import path from 'path';
-import fs from 'fs/promises';
+import * as path from 'path';
+import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
 import readline from 'readline';
 import ansis from 'ansis';
 
