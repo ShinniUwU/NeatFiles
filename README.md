@@ -55,22 +55,6 @@ When OCD Mode is enabled, NeatFiles creates additional folders based on the date
 - **`readline`**: Facilitates user interaction through the command line.
 - **`ansis`**: Adds color and style to the terminal output.
 
-## Example of Directory Structure
-
-With OCD Mode enabled, files will be sorted into categories such as:
-
-- **Audio**
-- **Images**
-- **Video**
-- **Documents**
-- **Compressed**
-- **Executables**
-- **Web**
-- **Fonts**
-- **System**
-
-Each category will have its own directory within the specified or current directory.
-
 ## Contributing
 
 Contributions are welcome! If you have suggestions, bug fixes, or improvements, please:
