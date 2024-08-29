@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs/promises';
 import readline from 'readline';
 import ansis from 'ansis';
 
@@ -30,24 +30,18 @@ const handleChoice = async (choice: string) => {
         await sortFiles(__dirname);
         console.log(ansis.green('\nDirectory sorted successfully!'));
       } catch (error) {
-        console.error(
-          ansis.red(`An error occurred while sorting files: ${error}`)
-        );
-      } finally {
-        console.log(
-          ansis.yellow('\n\nWhoopsie there was nothing to sort :3...')
-        );
-        main();
+        console.error(ansis.red(`An error occurred while sorting files: ${error}`));
       }
+      main();
       break;
     case '3':
       OCDMode = !OCDMode;
+      main();
       console.log(
         ansis.cyan(
           `OCD Mode: ${OCDMode ? ansis.green('ON') : ansis.red('OFF')}`
         )
       );
-      main();
       break;
     case '4':
       console.clear();
@@ -81,19 +75,20 @@ function sortByDirectory() {
         );
         return;
       }
-
       const dirPath = path.resolve(choice);
-      if (fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()) {
-        try {
+      
+      try {
+        const stats = await fs.lstat(dirPath);
+        if (stats.isDirectory()) {
           await sortFiles(dirPath);
           console.log(ansis.green('\nDirectory sorted successfully!'));
-        } catch (error) {
-          console.error(
-            ansis.red(`An error occurred while sorting files: ${error}`)
-          );
+        } else {
+          console.log(ansis.red('The provided path is not a directory.'));
         }
-      } else {
-        console.log(ansis.red('Invalid directory path. Please try again.'));
+      } catch (error) {
+        console.error(
+          ansis.red(`An error occurred while sorting files: ${error}`)
+        );
       }
 
       console.log('\nPress Enter to go back to menu...');
@@ -105,12 +100,7 @@ function sortByDirectory() {
 async function sortFiles(filePath: string): Promise<void> {
   if (OCDMode) {
     console.log(ansis.yellow('Sorting with OCD Mode...'));
-    // Example of watching for changes - use as needed
-    fs.watch(filePath, (eventType, filename) => {
-      if (filename) {
-        console.log(filename);
-      }
-    });
+    // OCD Mode implementation can be added here
   }
 
   const typeMappings: { [key: string]: string } = {
@@ -213,23 +203,22 @@ async function sortFiles(filePath: string): Promise<void> {
     '.bak': 'System',
   };
 
-  const files = fs.readdirSync(filePath);
-
-  for (const file of files) {
-    try {
+  try {
+    const files = await fs.readdir(filePath);
+    const movePromises = files.map(async (file) => {
       const ext = path.extname(file).toLowerCase();
       const targetDirName = typeMappings[ext];
       if (targetDirName) {
         const targetDir = path.join(filePath, targetDirName);
-        if (!fs.existsSync(targetDir)) {
-          fs.mkdirSync(targetDir);
-        }
-        fs.renameSync(path.join(filePath, file), path.join(targetDir, file));
+        await fs.mkdir(targetDir, { recursive: true });
+        await fs.rename(path.join(filePath, file), path.join(targetDir, file));
         console.log(ansis.green(`Moved ${file} to ${targetDir}`));
       }
-    } catch (error) {
-      console.error(ansis.red(`Failed to move ${file}: ${error}`));
-    }
+    });
+
+    await Promise.all(movePromises);
+  } catch (error) {
+    console.error(ansis.red(`An error occurred: ${error}`));
   }
 }
 
