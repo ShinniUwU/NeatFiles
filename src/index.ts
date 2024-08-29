@@ -131,7 +131,9 @@ const handleChoice = async (choice: string) => {
         await sortFiles(__dirname);
         console.log(ansis.green('\nDirectory sorted successfully!'));
       } catch (error) {
-        console.error(ansis.red(`An error occurred while sorting files: ${error}`));
+        console.error(
+          ansis.red(`An error occurred while sorting files: ${error}`)
+        );
       }
       main();
       break;
@@ -177,7 +179,7 @@ function sortByDirectory() {
         return;
       }
       const dirPath = path.resolve(choice);
-      
+
       try {
         const stats = await fs.lstat(dirPath);
         if (stats.isDirectory()) {
