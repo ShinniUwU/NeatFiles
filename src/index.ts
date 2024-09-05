@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import * as fsSync from 'fs';
 import readline from 'readline';
 import ansis from 'ansis';
+import {typeMappings} from './typeMappings';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,107 +10,6 @@ const rl = readline.createInterface({
 });
 
 let OCDMode: boolean = false;
-
-// Pre-define type mappings
-const typeMappings: { [key: string]: string } = {
-  '.mp3': 'Audio',
-  '.wav': 'Audio',
-  '.aiff': 'Audio',
-  '.au': 'Audio',
-  '.pcm': 'Audio',
-  '.flac': 'Audio',
-  '.ape': 'Audio',
-  '.wv': 'Audio',
-  '.alac': 'Audio',
-  '.m4a': 'Audio',
-  '.wma': 'Audio',
-  '.opus': 'Audio',
-  '.vorbis': 'Audio',
-  '.aac': 'Audio',
-  '.ogg': 'Audio',
-
-  '.png': 'Images',
-  '.jpg': 'Images',
-  '.jpeg': 'Images',
-  '.jp2': 'Images',
-  '.raf': 'Images',
-  '.gif': 'Images',
-  '.webp': 'Images',
-  '.heif': 'Images',
-  '.avif': 'Images',
-  '.jxl': 'Images',
-  '.tiff': 'Images',
-  '.bmp': 'Images',
-  '.raw': 'Images',
-  '.svg': 'Images',
-  '.ico': 'Images',
-
-  '.mp4': 'Video',
-  '.webm': 'Video',
-  '.mov': 'Video',
-  '.avi': 'Video',
-  '.wmv': 'Video',
-  '.flv': 'Video',
-  '.mkv': 'Video',
-  '.m4v': 'Video',
-  '.3gp': 'Video',
-
-  '.doc': 'Documents',
-  '.docx': 'Documents',
-  '.pdf': 'Documents',
-  '.txt': 'Documents',
-  '.rtf': 'Documents',
-  '.odt': 'Documents',
-  '.xls': 'Documents',
-  '.xlsx': 'Documents',
-  '.csv': 'Documents',
-  '.epub': 'Documents',
-  '.ppt': 'Documents',
-  '.pptx': 'Documents',
-  '.md': 'Documents',
-  '.ods': 'Documents',
-  '.pages': 'Documents',
-
-  '.zip': 'Compressed',
-  '.rar': 'Compressed',
-  '.7z': 'Compressed',
-  '.tar': 'Compressed',
-  '.gz': 'Compressed',
-  '.bz2': 'Compressed',
-  '.tar.gz': 'Compressed',
-  '.xz': 'Compressed',
-
-  '.exe': 'Executables',
-  '.bat': 'Executables',
-  '.sh': 'Executables',
-  '.app': 'Executables',
-  '.msi': 'Executables',
-  '.com': 'Executables',
-  '.bin': 'Executables',
-  '.jar': 'Executables',
-
-  '.js': 'Web',
-  '.jsx': 'Web',
-  '.html': 'Web',
-  '.xml': 'Web',
-  '.json': 'Web',
-  '.css': 'Web',
-  '.jsonc': 'Web',
-  '.php': 'Web',
-  '.ts': 'Web',
-
-  '.ttf': 'Fonts',
-  '.otf': 'Fonts',
-  '.woff': 'Fonts',
-  '.woff2': 'Fonts',
-
-  '.dll': 'System',
-  '.sys': 'System',
-  '.ini': 'System',
-  '.log': 'System',
-  '.dmp': 'System',
-  '.bak': 'System',
-};
 
 function menu() {
   console.log(ansis.cyan('\nMenu'));
